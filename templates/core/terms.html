@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block title %}Terms & Privacy - DYP Salokhenagar Alumni Portal{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Terms of Service & Privacy Policy</h1>
+        
+        <h2 class="mt-4">Terms of Service</h2>
+        <p>
+            Welcome to the DYP Salokhenagar Alumni Portal. By accessing or using our service, you agree to be bound 
+            by these Terms of Service. Please read them carefully.
+        </p>
+        
+        <h3>1. User Accounts</h3>
+        <ul>
+            <li>You must provide accurate and complete information when creating an account.</li>
+            <li>You are responsible for maintaining the security of your account and password.</li>
+            <li>You must be a current student or alumnus of DYP Salokhenagar to register.</li>
+            <li>Verification is required to access certain features of the portal.</li>
+        </ul>
+        
+        <h3>2. Content Guidelines</h3>
+        <ul>
+            <li>All content posted must be text-only and adhere to professional standards.</li>
+            <li>Posts must be related to achievements or job opportunities.</li>
+            <li>Content that is offensive, discriminatory, or inappropriate will be removed.</li>
+            <li>Users who repeatedly violate content guidelines may have their accounts suspended.</li>
+        </ul>
+        
+        <h3>3. Communication</h3>
+        <ul>
+            <li>Private messaging is intended for professional networking and mentoring.</li>
+            <li>Harassment or spam through the messaging system is prohibited.</li>
+            <li>All communications may be monitored by administrators for compliance with guidelines.</li>
+        </ul>
+        
+        <h2 class="mt-4">Privacy Policy</h2>
+        <p>
+            Your privacy is important to us. This Privacy Policy explains how we collect, use, and protect your 
+            personal information when you use the DYP Salokhenagar Alumni Portal.
+        </p>
+        
+        <h3>1. Information We Collect</h3>
+        <ul>
+            <li>Personal information provided during registration (name, email, graduation year, etc.)</li>
+            <li>Profile information you choose to share</li>
+            <li>Content you post on the portal</li>
+            <li>Messages you send through the portal</li>
+        </ul>
+        
+        <h3>2. How We Use Your Information</h3>
+        <ul>
+            <li>To verify your identity as a student or alumnus</li>
+            <li>To enable communication between users</li>
+            <li>To display your profile in the directory (if verified)</li>
+            <li>To improve and maintain the portal</li>
+        </ul>
+        
+        <h3>3. Information Sharing</h3>
+        <ul>
+            <li>Your profile information is visible to other verified users</li>
+            <li>Contact information is only visible to verified users</li>
+            <li>We do not share your information with third parties</li>
+            <li>Administrators have access to all information for moderation purposes</li>
+        </ul>
+        
+        <h3>4. Data Security</h3>
+        <ul>
+            <li>We implement appropriate security measures to protect your information</li>
+            <li>We use secure authentication methods</li>
+            <li>All data is stored securely in our database</li>
+        </ul>
+        
+        <p class="mt-4">
+            By using the DYP Salokhenagar Alumni Portal, you agree to these Terms of Service and Privacy Policy.
+            If you have any questions or concerns, please <a href="{% url 'contact' %}">contact us</a>.
+        </p>
+    </div>
+</div>
+{% endblock %}

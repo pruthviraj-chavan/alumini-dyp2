@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - DYP Salokhenagar Alumni Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-body">
+                <h1 class="card-title">Welcome to DYP Salokhenagar Alumni Portal</h1>
+                <p class="card-text">
+                    Connect with alumni and current students of DYP Salokhenagar. Share your achievements, 
+                    post job opportunities, and build your professional network.
+                </p>
+                {% if not user.is_authenticated %}
+                    <div class="mt-4">
+                        <a href="{% url 'register' %}" class="btn btn-primary me-2">Register</a>
+                        <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        {% if recent_posts %}
+            <h2 class="mt-4">Recent Posts</h2>
+            {% for post in recent_posts %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ post.title }}</h5>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            {{ post.get_category_display }} by {{ post.user.first_name }} {{ post.user.last_name }}
+                        </h6>
+                        <p class="card-text">{{ post.content|truncatewords:30 }}</p>
+                        <a href="{% url 'post_detail' post.id %}" class="card-link">Read more</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted on {{ post.created_at|date:"F d, Y" }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">About the Portal</h5>
+                <p class="card-text">
+                    The DYP Salokhenagar Alumni Portal is a platform for alumni and current students to connect,
+                    network, and share opportunities. Join our community today!
+                </p>
+                <a href="{% url 'about' %}" class="btn btn-outline-primary">Learn More</a>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Quick Links</h5>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <a href="{% url 'directory' %}">Alumni Directory</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'post_list' %}?category=JOB">Job Opportunities</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'post_list' %}?category=ACHIEVEMENT">Achievements</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'contact' %}">Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

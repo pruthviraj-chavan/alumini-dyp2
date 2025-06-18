@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}Chat Inbox - DYP Salokhenagar Alumni Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Chat Inbox</h1>
+            <a href="{% url 'start_new_chat' %}" class="btn btn-primary">Start New Chat</a>
+        </div>
+        
+        {% if chat_partners %}
+            <div class="list-group">
+                {% for partner in chat_partners %}
+                    <a href="{% url 'chat_with_user' partner.id %}" class="list-group-item list-group-item-action">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-1">{{ partner.first_name }} {{ partner.last_name }}</h5>
+                            <small>{{ partner.get_role_display }}</small>
+                        </div>
+                        <p class="mb-1">{{ partner.branch }} - {{ partner.year }}</p>
+                        {% if partner.received_messages.all|length > 0 or partner.sent_messages.all|length > 0 %}
+                            <small>
+                                {% if partner.received_messages.all|length > 0 %}
+                                    <span class="badge bg-primary">Unread messages</span>
+                                {% endif %}
+                                Last message: 
+                                {% if partner.received_messages.all|length > 0 %}
+                                    {% with last_msg=partner.received_messages.all|dictsort:'-timestamp'|first %}
+                                        {{ last_msg.timestamp|date:"M d, Y H:i" }}
+                                    {% endwith %}
+                                {% elif partner.sent_messages.all|length > 0 %}
+                                    {% with last_msg=partner.sent_messages.all|dictsort:'-timestamp'|first %}
+                                        {{ last_msg.timestamp|date:"M d, Y H:i" }}
+                                    {% endwith %}
+                                {% endif %}
+                            </small>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                <p>You haven't started any conversations yet.</p>
+                <p>Click the "Start New Chat" button to begin a conversation with a verified user.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Delete Post - DYP Salokhenagar Alumni Portal{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">Delete Post</h1>
+        <p class="card-text">Are you sure you want to delete the post "{{ post.title }}"?</p>
+        
+        <form method="post">
+            {% csrf_token %}
+            <div class="d-flex justify-content-between">
+                <a href="{% url 'post_detail' post.id %}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

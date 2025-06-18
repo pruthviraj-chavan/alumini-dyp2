@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}About - DYP Salokhenagar Alumni Portal{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-body">
+        <h1 class="card-title">About DYP Salokhenagar Alumni Portal</h1>
+        <p class="card-text">
+            The DYP Salokhenagar Alumni Portal is a dedicated platform designed to foster connections between 
+            current students and alumni of our prestigious institution. Our mission is to create a vibrant 
+            community where knowledge sharing, networking, and professional growth are encouraged.
+        </p>
+        
+        <h2 class="mt-4">Our Mission</h2>
+        <p>
+            To build a responsive, secure, and fast-loading web portal that enables verified communication 
+            between current students and alumni of DYP Salokhenagar. The portal allows text-only interactions, 
+            achievement/job postings, and private messaging, moderated and managed through an admin dashboard.
+        </p>
+        
+        <h2 class="mt-4">Key Features</h2>
+        <ul>
+            <li>Secure user authentication and verification system</li>
+            <li>Role-based access for students, alumni, and administrators</li>
+            <li>Text-only posts for achievements and job opportunities</li>
+            <li>Private messaging between students and alumni</li>
+            <li>Searchable directory of verified alumni and students</li>
+            <li>Admin moderation of all content and user verification</li>
+        </ul>
+        
+        <h2 class="mt-4">Get Involved</h2>
+        <p>
+            Whether you're a current student looking to connect with alumni for career guidance, or an alumnus 
+            wanting to give back to your alma mater by sharing opportunities and mentoring students, 
+            this portal is designed for you. Join our community today!
+        </p>
+        
+        <div class="mt-4">
+            {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="btn btn-primary me-2">Register</a>
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
+            {% else %}
+                <a href="{% url 'directory' %}" class="btn btn-primary">Browse Directory</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

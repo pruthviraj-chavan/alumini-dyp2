@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% block title %}Posts - DYP Salokhenagar Alumni Portal{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <h1>Posts</h1>
+        
+        <div class="mb-4">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <select class="form-select" name="category">
+                        <option value="">All Categories</option>
+                        <option value="ACHIEVEMENT" {% if request.GET.category == 'ACHIEVEMENT' %}selected{% endif %}>Achievements</option>
+                        <option value="JOB" {% if request.GET.category == 'JOB' %}selected{% endif %}>Job Opportunities</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <input type="text" class="form-control" name="search" placeholder="Search posts..." value="{{ request.GET.search }}">
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary w-100">Filter</button>
+                </div>
+            </form>
+        </div>
+        
+        {% if posts %}
+            {% for post in posts %}
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h2 class="card-title">{{ post.title }}</h2>
+                        <h6 class="card-subtitle mb-2 text-muted">
+                            {{ post.get_category_display }} by 
+                            <a href="{% url 'user_profile' post.user.id %}">{{ post.user.first_name }} {{ post.user.last_name }}</a>
+                        </h6>
+                        <p class="card-text">{{ post.content|truncatewords:50 }}</p>
+                        <a href="{% url 'post_detail' post.id %}" class="btn btn-primary">Read More</a>
+                    </div>
+                    <div class="card-footer text-muted">
+                        Posted on {{ post.created_at|date:"F d, Y" }}
+                    </div>
+                </div>
+            {% endfor %}
+            
+            <!-- Pagination -->
+            {% if posts.has_other_pages %}
+                <nav aria-label="Page navigation">
+                    <ul class="pagination justify-content-center">
+                        {% if posts.has_previous %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ posts.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Previous">
+                                    <span aria-hidden="true">&laquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                        
+                        {% for i in posts.paginator.page_range %}
+                            {% if posts.number == i %}
+                                <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                            {% else %}
+                                <li class="page-item"><a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        {% if posts.has_next %}
+                            <li class="page-item">
+                                <a class="page-link" href="?page={{ posts.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% else %}
+                            <li class="page-item disabled">
+                                <a class="page-link" href="#" aria-label="Next">
+                                    <span aria-hidden="true">&raquo;</span>
+                                </a>
+                            </li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            {% endif %}
+        {% else %}
+            <div class="alert alert-info">No posts found matching your criteria.</div>
+        {% endif %}
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Create a Post</h5>
+                <p class="card-text">Share your achievements or job opportunities with the community.</p>
+                <a href="{% url 'post_create' %}" class="btn btn-primary">Create New Post</a>
+            </div>
+        </div>
+        
+        <div class="card mt-4">
+            <div class="card-body">
+                <h5 class="card-title">Categories</h5>
+                <div class="list-group">
+                    <a href="{% url 'post_list' %}" class="list-group-item list-group-item-action {% if not request.GET.category %}active{% endif %}">
+                        All Categories
+                    </a>
+                    <a href="{% url 'post_list' %}?category=ACHIEVEMENT" class="list-group-item list-group-item-action {% if request.GET.category == 'ACHIEVEMENT' %}active{% endif %}">
+                        Achievements
+                    </a>
+                    <a href="{% url 'post_list' %}?category=JOB" class="list-group-item list-group-item-action {% if request.GET.category == 'JOB' %}active{% endif %}">
+                        Job Opportunities
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
