@@ -16,6 +16,121 @@
     <link href="{% static 'css/custom.css' %}" rel="stylesheet">
     
     <style>
+        /* Additional Mobile and Responsive Fixes */
+        @media (max-width: 1200px) {
+            .container-fluid {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        /* Tablet specific fixes */
+        @media (max-width: 991px) {
+            .content {
+                margin-top: 85px;
+                padding: 1.5rem;
+            }
+            
+            .navbar-collapse {
+                margin-top: 0.5rem;
+                padding: 1rem;
+            }
+            
+            .row > [class*="col-"] {
+                margin-bottom: 1rem;
+            }
+        }
+
+        /* Mobile specific fixes */
+        @media (max-width: 767px) {
+            .content {
+                margin: 0.5rem;
+                margin-top: 75px;
+                padding: 1rem;
+                border-radius: 10px;
+            }
+            
+            /* Fix form elements */
+            .form-control,
+            .form-select {
+                font-size: 16px; /* Prevent zoom on iOS */
+            }
+            
+            /* Fix pagination */
+            .pagination {
+                justify-content: center;
+                flex-wrap: wrap;
+            }
+            
+            .pagination .page-link {
+                padding: 0.5rem 0.75rem;
+                margin: 0.1rem;
+            }
+            
+            /* Fix dropdown menus */
+            .dropdown-menu {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        /* Small mobile fixes */
+        @media (max-width: 575px) {
+            .content {
+                margin: 0.25rem;
+                margin-top: 70px;
+                padding: 0.75rem;
+            }
+            
+            .display-4 {
+                font-size: 1.8rem;
+            }
+            
+            .lead {
+                font-size: 1rem;
+            }
+            
+            /* Make images responsive */
+            img {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+
+        /* Fix navbar issues */
+        .navbar-nav .nav-link {
+            white-space: nowrap;
+        }
+
+        /* Ensure proper touch targets */
+        @media (max-width: 767px) {
+            .btn,
+            .nav-link,
+            .dropdown-item,
+            .page-link {
+                min-height: 44px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+        }
+
+        /* Fix overflow issues */
+        body {
+            overflow-x: hidden;
+        }
+
+        .container-fluid {
+            overflow-x: hidden;
+        }
+
+        /* Improve loading and performance */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+    </style>
+    
+    <style>
         :root {
             --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
@@ -65,14 +180,15 @@
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0,0,0,0.1);
-            padding: 1rem 0;
+            padding: 0.8rem 0;
             transition: all 0.3s ease;
+            min-height: 70px;
         }
 
         .navbar-brand {
             font-family: 'Poppins', sans-serif;
             font-weight: 700;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             background: var(--primary-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -126,6 +242,7 @@
             backdrop-filter: blur(20px);
             border-radius: var(--border-radius);
             margin: 2rem auto;
+            margin-top: 90px; /* Account for fixed navbar */
             padding: 2rem;
             box-shadow: var(--card-shadow);
             min-height: calc(100vh - 200px);
@@ -302,20 +419,105 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 991px) {
+            .navbar-brand {
+                font-size: 1.1rem;
+            }
+            
+            .navbar-nav .nav-link {
+                margin: 0.2rem 0;
+                text-align: center;
+            }
+            
+            .content {
+                margin-top: 80px;
+                margin-left: 1rem;
+                margin-right: 1rem;
+                padding: 1.5rem;
+                border-radius: 15px;
+            }
+        }
+
         @media (max-width: 768px) {
             .content {
                 margin: 1rem;
+                margin-top: 80px;
                 padding: 1rem;
                 border-radius: 15px;
+                min-height: calc(100vh - 160px);
             }
             
             .navbar-brand {
-                font-size: 1.2rem;
+                font-size: 1rem;
             }
             
             .card-body {
                 padding: 1.5rem;
             }
+            
+            .btn {
+                padding: 0.6rem 1.5rem;
+                margin: 0.25rem;
+            }
+            
+            .navbar {
+                padding: 0.5rem 0;
+                min-height: 60px;
+            }
+            
+            .navbar-toggler {
+                border: none;
+                padding: 0.25rem 0.5rem;
+            }
+            
+            .navbar-collapse {
+                background: rgba(255, 255, 255, 0.98);
+                backdrop-filter: blur(20px);
+                border-radius: 15px;
+                margin-top: 1rem;
+                padding: 1rem;
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            }
+        }
+
+        @media (max-width: 576px) {
+            .content {
+                margin: 0.5rem;
+                margin-top: 70px;
+                padding: 1rem;
+                border-radius: 10px;
+            }
+            
+            .navbar-brand {
+                font-size: 0.9rem;
+            }
+            
+            .btn {
+                font-size: 0.9rem;
+                padding: 0.5rem 1rem;
+            }
+            
+            .card {
+                margin-bottom: 1rem;
+            }
+            
+            .card-body {
+                padding: 1rem;
+            }
+        }
+
+        /* Navbar Toggler Custom Style */
+        .navbar-toggler {
+            border: 2px solid #667eea;
+            border-radius: 8px;
+        }
+        
+        .navbar-toggler:focus {
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28102, 126, 234, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='m4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
         }
 
         /* Loading Animation */
@@ -339,10 +541,11 @@
 <body>
     <!-- Navigation -->
     <nav class="navbar navbar-expand-lg fixed-top">
-        <div class="container">
+        <div class="container-fluid">
             <a class="navbar-brand d-flex align-items-center" href="{% url 'home' %}">
                 <i class="fas fa-graduation-cap me-2"></i>
-                DYP Salokhenagar Alumni Portal
+                <span class="d-none d-sm-inline">DYP Salokhenagar Alumni Portal</span>
+                <span class="d-sm-none">DYP Portal</span>
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -387,9 +590,10 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fas fa-user-circle me-1"></i>
-                                {{ user.email }}
+                                <span class="d-none d-md-inline">{{ user.email }}</span>
+                                <span class="d-md-none">Account</span>
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="{% url 'profile' %}">
                                     <i class="fas fa-user me-2"></i>My Profile
                                 </a></li>
@@ -422,7 +626,7 @@
     </nav>
 
     <!-- Main Content -->
-    <div class="container content mt-4">
+    <div class="container-fluid content">
         {% if messages %}
             <div class="messages">
                 {% for message in messages %}
