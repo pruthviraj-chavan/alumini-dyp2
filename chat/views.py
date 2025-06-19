@@ -59,18 +59,14 @@ def chat_with_user(request, user_id):
 @login_required
 def start_new_chat(request):
     """View for starting a new chat with a user"""
-    # Get role-based filter
-    role_filter = None
-    if request.user.role == 'STUDENT':
-        role_filter = 'ALUMNI'
-    elif request.user.role == 'ALUMNI':
-        role_filter = 'STUDENT'
+    # Get all verified users that the user can chat with
+    # Remove the role filtering to allow chatting with any verified user
+    available_users = User.objects.filter(is_verified=True).exclude(id=request.user.id)
     
-    # Get all verified users of the appropriate role that the user can chat with
-    if role_filter:
-        available_users = User.objects.filter(role=role_filter, is_verified=True)
-    else:
-        available_users = User.objects.filter(is_verified=True).exclude(id=request.user.id)
+    # Debug information
+    print(f"Available users for chat: {available_users.count()}")
+    for user in available_users:
+        print(f"User: {user.email}, Verified: {user.is_verified}")
     
     context = {
         'available_users': available_users,

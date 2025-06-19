@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.utils import timezone
@@ -22,6 +22,13 @@ def register(request):
 
 def user_login(request):
     """View for user login"""
+    # If user is already authenticated, redirect to home
+    if request.user.is_authenticated:
+        return redirect('home')
+        
+    # Get the next parameter if it exists
+    next_url = request.GET.get('next', 'home')
+    
     if request.method == 'POST':
         form = UserLoginForm(request, data=request.POST)
         if form.is_valid():
@@ -33,7 +40,10 @@ def user_login(request):
                 if user.is_verified or user.is_staff or user.is_superuser:
                     login(request, user)
                     messages.success(request, f'Welcome back, {user.first_name}!')
-                    return redirect('home')
+                    
+                    # Get the next URL from the form if it was submitted
+                    next_page = request.POST.get('next', next_url)
+                    return redirect(next_page)
                 else:
                     # User is not verified
                     messages.error(request, 'Your account is pending verification. Please wait for admin approval.')
@@ -97,8 +107,13 @@ def request_verification(request):
             verification_request.student = request.user
             verification_request.save()
             messages.success(request, 'Verification request submitted successfully. Please wait for admin approval.')
-            return redirect('profile')
+            return render(request, 'accounts/request_verification.html', {'form': form})
     else:
         form = VerificationRequestForm()
-    
-    return render(request, 'accounts/request_verification.html', {'form': form})
+        return render(request, 'accounts/request_verification.html', {'form': form})
+
+def user_logout(request):
+    """Custom view for user logout that handles both GET and POST requests"""
+    logout(request)
+    messages.success(request, 'You have been successfully logged out.')
+    return redirect('home')

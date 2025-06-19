@@ -17,8 +17,9 @@
                                 <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
                                 <h6 class="card-subtitle mb-2 text-muted">{{ user.get_role_display }}</h6>
                                 <p class="card-text">
-                                    <strong>Branch:</strong> {{ user.get_branch_display }}<br>
+                                    <strong>Branch:</strong> {{ user.branch }}<br>
                                     <strong>Year:</strong> {{ user.year }}<br>
+                                    <strong>Email:</strong> {{ user.email }}<br>
                                 </p>
                                 <div class="d-grid">
                                     <a href="{% url 'chat_with_user' user.id %}" class="btn btn-primary">Start Chat</a>

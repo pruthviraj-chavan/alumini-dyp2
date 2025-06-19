@@ -7,8 +7,18 @@ User = get_user_model()
 
 class UserRegistrationForm(UserCreationForm):
     """Form for user registration"""
+    BRANCH_CHOICES = [
+        ('CSE', 'Computer Science Engineering'),
+        ('IT', 'Information Technology'),
+        ('MECH', 'Mechanical Engineering'),
+        ('CIVIL', 'Civil Engineering'),
+        ('ENTC', 'Electronics & Telecommunication'),
+        ('ELECTRICAL', 'Electrical Engineering'),
+        ('OTHER', 'Other')
+    ]
+    
     role = forms.ChoiceField(choices=[('STUDENT', 'Student'), ('ALUMNI', 'Alumni')])
-    branch = forms.CharField(max_length=100, required=True)
+    branch = forms.ChoiceField(choices=BRANCH_CHOICES, required=True)
     year = forms.CharField(max_length=10, required=True, help_text="Current year for students, passing year for alumni")
     phone = forms.CharField(max_length=15, required=True)
     bio = forms.CharField(widget=forms.Textarea, required=False)

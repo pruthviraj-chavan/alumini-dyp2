@@ -2,128 +2,688 @@
 
 {% block title %}Directory - DYP Salokhenagar Alumni Portal{% endblock %}
 
-{% block content %}
-<div class="card">
-    <div class="card-body">
-        <h1 class="card-title">Alumni & Student Directory</h1>
-        <p class="card-text">
-            Browse through our directory of verified alumni and students. Use the filters below to narrow down your search.
-        </p>
+{% block extra_css %}
+<style>
+    .directory-hero {
+        background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+        border-radius: 25px;
+        padding: 2.5rem 2rem;
+        text-align: center;
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .directory-hero::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: 
+            radial-gradient(circle at 30% 70%, rgba(102, 126, 234, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 70% 30%, rgba(245, 87, 108, 0.1) 0%, transparent 50%);
+        animation: float 8s ease-in-out infinite;
+        pointer-events: none;
+    }
+
+    .filter-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 25px;
+        padding: 2.5rem;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        margin-bottom: 3rem;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .filter-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #4facfe, #00f2fe);
+    }
+
+    .filter-title {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 2rem;
+        display: flex;
+        align-items: center;
+    }
+
+    .filter-title i {
+        margin-right: 0.5rem;
+        color: #4facfe;
+    }
+
+    .form-floating .form-control,
+    .form-floating .form-select {
+        border: 2px solid #e9ecef;
+        border-radius: 15px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+        min-height: 58px;
+    }
+
+    .form-floating .form-control:focus,
+    .form-floating .form-select:focus {
+        border-color: #4facfe;
+        box-shadow: 0 0 0 0.2rem rgba(79, 172, 254, 0.25);
+        background: white;
+    }
+
+    .form-floating label {
+        color: #6c757d;
+        font-weight: 500;
+    }
+
+    .btn-filter {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        border: none;
+        border-radius: 20px;
+        padding: 0.8rem 2rem;
+        font-weight: 600;
+        color: white;
+        transition: all 0.3s ease;
+    }
+
+    .btn-filter:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(79, 172, 254, 0.4);
+        color: white;
+    }
+
+    .btn-clear {
+        background: transparent;
+        border: 2px solid #6c757d;
+        border-radius: 20px;
+        padding: 0.8rem 2rem;
+        font-weight: 500;
+        color: #6c757d;
+        transition: all 0.3s ease;
+    }
+
+    .btn-clear:hover {
+        background: #6c757d;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .user-card {
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        border: none;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        overflow: hidden;
+        position: relative;
+        height: 100%;
+    }
+
+    .user-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, #667eea, #764ba2);
+        transform: scaleX(0);
+        transition: transform 0.3s ease;
+    }
+
+    .user-card:hover::before {
+        transform: scaleX(1);
+    }
+
+    .user-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    }
+
+    .user-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 0 auto 1.5rem;
+        box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    }
+
+    .user-role-badge {
+        display: inline-block;
+        padding: 0.4rem 1rem;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 1rem;
+    }
+
+    .user-role-badge.student {
+        background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        color: white;
+    }
+
+    .user-role-badge.alumni {
+        background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        color: white;
+    }
+
+    .user-info {
+        padding: 1.5rem;
+    }
+
+    .user-name {
+        font-family: 'Poppins', sans-serif;
+        font-weight: 600;
+        color: #2c3e50;
+        margin-bottom: 0.5rem;
+        font-size: 1.2rem;
+    }
+
+    .user-details {
+        color: #6c757d;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+    }
+
+    .user-details strong {
+        color: #2c3e50;
+        font-weight: 600;
+    }
+
+    .btn-profile {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border: none;
+        border-radius: 20px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        color: white;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-profile:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+    }
+
+    .btn-message {
+        background: transparent;
+        border: 2px solid #4facfe;
+        border-radius: 20px;
+        padding: 0.6rem 1.5rem;
+        font-weight: 500;
+        color: #4facfe;
+        font-size: 0.9rem;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+    }
+
+    .btn-message:hover {
+        background: #4facfe;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .no-results {
+        text-align: center;
+        padding: 4rem 2rem;
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border-radius: 20px;
+        margin: 2rem 0;
+    }
+
+    .no-results i {
+        font-size: 4rem;
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+    }
+
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 3rem;
+    }
+
+    .pagination .page-link {
+        border: none;
+        border-radius: 12px;
+        margin: 0 0.2rem;
+        padding: 0.7rem 1rem;
+        color: #667eea;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(10px);
+        transition: all 0.3s ease;
+    }
+
+    .pagination .page-link:hover {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .pagination .page-item.active .page-link {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .pagination .page-item.disabled .page-link {
+        color: #6c757d;
+        background: rgba(255, 255, 255, 0.5);
+    }
+
+    .stats-bar {
+        background: rgba(255, 255, 255, 0.9);
+        backdrop-filter: blur(20px);
+        border-radius: 15px;
+        padding: 1.5rem 2rem;
+        margin-bottom: 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+
+    .stats-item {
+        text-align: center;
+    }
+
+    .stats-number {
+        font-size: 1.5rem;
+        font-weight: 700;
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: block;
+    }
+
+    .stats-label {
+        color: #6c757d;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .scroll-animation {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: all 0.6s ease;
+    }
+
+    .scroll-animation.active {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-15px) rotate(2deg); }
+    }
+
+    @media (max-width: 768px) {
+        .directory-hero {
+            padding: 2rem 1.5rem;
+        }
         
-        <div class="row mb-4">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Filter Directory</h5>
-                        <form method="get" class="row g-3">
-                            <div class="col-md-3">
-                                <label for="role" class="form-label">Role</label>
-                                <select class="form-select" id="role" name="role">
-                                    <option value="">All Roles</option>
-                                    <option value="STUDENT" {% if request.GET.role == 'STUDENT' %}selected{% endif %}>Student</option>
-                                    <option value="ALUMNI" {% if request.GET.role == 'ALUMNI' %}selected{% endif %}>Alumni</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="branch" class="form-label">Branch</label>
-                                <select class="form-select" id="branch" name="branch">
-                                    <option value="">All Branches</option>
-                                    <option value="CSE" {% if request.GET.branch == 'CSE' %}selected{% endif %}>Computer Science</option>
-                                    <option value="IT" {% if request.GET.branch == 'IT' %}selected{% endif %}>Information Technology</option>
-                                    <option value="ECE" {% if request.GET.branch == 'ECE' %}selected{% endif %}>Electronics & Communication</option>
-                                    <option value="EEE" {% if request.GET.branch == 'EEE' %}selected{% endif %}>Electrical Engineering</option>
-                                    <option value="ME" {% if request.GET.branch == 'ME' %}selected{% endif %}>Mechanical Engineering</option>
-                                    <option value="CE" {% if request.GET.branch == 'CE' %}selected{% endif %}>Civil Engineering</option>
-                                </select>
-                            </div>
-                            <div class="col-md-3">
-                                <label for="year" class="form-label">Year</label>
-                                <input type="number" class="form-control" id="year" name="year" placeholder="Graduation Year" value="{{ request.GET.year }}">
-                            </div>
-                            <div class="col-md-3">
-                                <label for="search" class="form-label">Search</label>
-                                <input type="text" class="form-control" id="search" name="search" placeholder="Name or Email" value="{{ request.GET.search }}">
-                            </div>
-                            <div class="col-12">
-                                <button type="submit" class="btn btn-primary">Apply Filters</button>
-                                <a href="{% url 'directory' %}" class="btn btn-outline-secondary">Clear Filters</a>
-                            </div>
-                        </form>
+        .filter-card {
+            padding: 2rem 1.5rem;
+        }
+        
+        .stats-bar {
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .stats-bar .row {
+            width: 100%;
+        }
+        
+        .user-card {
+            margin-bottom: 1.5rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="scroll-animation">
+    <!-- Hero Section -->
+    <div class="directory-hero">
+        <h1 class="display-4 fw-bold mb-3">
+            <i class="fas fa-users me-3"></i>
+            Alumni & Student Directory
+        </h1>
+        <p class="lead mb-0">
+            Browse through our directory of verified alumni and students. Connect, network, and grow together.
+        </p>
+    </div>
+</div>
+
+<div class="scroll-animation">
+    <!-- Filter Section -->
+    <div class="filter-card">
+        <h5 class="filter-title">
+            <i class="fas fa-filter"></i>
+            Filter Directory
+        </h5>
+        <form method="get" class="row g-3">
+            <div class="col-md-3">
+                <div class="form-floating">
+                    <select class="form-select" id="role" name="role">
+                        <option value="">All Roles</option>
+                        <option value="STUDENT" {% if request.GET.role == 'STUDENT' %}selected{% endif %}>Student</option>
+                        <option value="ALUMNI" {% if request.GET.role == 'ALUMNI' %}selected{% endif %}>Alumni</option>
+                    </select>
+                    <label for="role">
+                        <i class="fas fa-user-tag me-2"></i>Role
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-floating">
+                    <select class="form-select" id="branch" name="branch">
+                        <option value="">All Branches</option>
+                        <option value="CSE" {% if request.GET.branch == 'CSE' %}selected{% endif %}>Computer Science</option>
+                        <option value="IT" {% if request.GET.branch == 'IT' %}selected{% endif %}>Information Technology</option>
+                        <option value="ECE" {% if request.GET.branch == 'ECE' %}selected{% endif %}>Electronics & Communication</option>
+                        <option value="EEE" {% if request.GET.branch == 'EEE' %}selected{% endif %}>Electrical Engineering</option>
+                        <option value="ME" {% if request.GET.branch == 'ME' %}selected{% endif %}>Mechanical Engineering</option>
+                        <option value="CE" {% if request.GET.branch == 'CE' %}selected{% endif %}>Civil Engineering</option>
+                    </select>
+                    <label for="branch">
+                        <i class="fas fa-graduation-cap me-2"></i>Branch
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-floating">
+                    <input type="number" class="form-control" id="year" name="year" placeholder="Graduation Year" value="{{ request.GET.year }}" min="1990" max="2030">
+                    <label for="year">
+                        <i class="fas fa-calendar me-2"></i>Graduation Year
+                    </label>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="search" name="search" placeholder="Name or Email" value="{{ request.GET.search }}">
+                    <label for="search">
+                        <i class="fas fa-search me-2"></i>Search
+                    </label>
+                </div>
+            </div>
+            <div class="col-12 text-center">
+                <button type="submit" class="btn btn-filter me-3">
+                    <i class="fas fa-search me-2"></i>Apply Filters
+                </button>
+                <a href="{% url 'directory' %}" class="btn btn-clear">
+                    <i class="fas fa-times me-2"></i>Clear Filters
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if users %}
+    <div class="scroll-animation">
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="row w-100 text-center">
+                <div class="col-md-3 col-6">
+                    <div class="stats-item">
+                        <span class="stats-number">{{ users.paginator.count }}</span>
+                        <span class="stats-label">Total Results</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stats-item">
+                        <span class="stats-number">{{ users|length }}</span>
+                        <span class="stats-label">This Page</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stats-item">
+                        <span class="stats-number">{{ users.number }}</span>
+                        <span class="stats-label">Page Number</span>
+                    </div>
+                </div>
+                <div class="col-md-3 col-6">
+                    <div class="stats-item">
+                        <span class="stats-number">{{ users.paginator.num_pages }}</span>
+                        <span class="stats-label">Total Pages</span>
                     </div>
                 </div>
             </div>
         </div>
-        
-        {% if users %}
-            <div class="row">
-                {% for user in users %}
-                    <div class="col-md-4 mb-4">
-                        <div class="card h-100">
-                            <div class="card-body">
-                                <h5 class="card-title">{{ user.first_name }} {{ user.last_name }}</h5>
-                                <h6 class="card-subtitle mb-2 text-muted">{{ user.get_role_display }}</h6>
-                                <p class="card-text">
-                                    <strong>Branch:</strong> {{ user.get_branch_display }}<br>
-                                    <strong>Year:</strong> {{ user.year }}<br>
-                                    {% if user.bio %}
-                                        <strong>Bio:</strong> {{ user.bio|truncatewords:20 }}
-                                    {% endif %}
+    </div>
+
+    <div class="scroll-animation">
+        <!-- User Cards Grid -->
+        <div class="row">
+            {% for user in users %}
+                <div class="col-xl-4 col-md-6 mb-4">
+                    <div class="card user-card">
+                        <div class="user-info text-center">
+                            <!-- User Avatar -->
+                            <div class="user-avatar">
+                                {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                            </div>
+                            
+                            <!-- User Role Badge -->
+                            <span class="user-role-badge {{ user.role|lower }}">
+                                <i class="fas fa-{% if user.role == 'STUDENT' %}user-graduate{% else %}user-tie{% endif %} me-1"></i>
+                                {{ user.get_role_display }}
+                            </span>
+                            
+                            <!-- User Name -->
+                            <h5 class="user-name">{{ user.first_name }} {{ user.last_name }}</h5>
+                            
+                            <!-- User Details -->
+                            <div class="user-details">
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-code me-1"></i>Branch:</strong> {{ user.get_branch_display }}
                                 </p>
-                                <a href="{% url 'user_profile' user.id %}" class="btn btn-primary">View Profile</a>
-                                {% if user.is_verified and request.user.is_verified %}
-                                    <a href="{% url 'chat_with_user' user.id %}" class="btn btn-outline-primary">Message</a>
+                                <p class="mb-2">
+                                    <strong><i class="fas fa-calendar me-1"></i>Year:</strong> {{ user.year }}
+                                </p>
+                                {% if user.bio %}
+                                    <p class="mb-0">
+                                        <strong><i class="fas fa-info-circle me-1"></i>Bio:</strong>
+                                        {{ user.bio|truncatewords:15 }}
+                                    </p>
                                 {% endif %}
                             </div>
+                            
+                            <!-- Action Buttons -->
+                            <div class="mt-3">
+                                <a href="{% url 'user_profile' user.id %}" class="btn-profile me-2">
+                                    <i class="fas fa-eye me-1"></i>View Profile
+                                </a>
+                                {% if user.is_verified and request.user.is_verified %}
+                                    <a href="{% url 'chat_with_user' user.id %}" class="btn-message">
+                                        <i class="fas fa-comment me-1"></i>Message
+                                    </a>
+                                {% endif %}
+                            </div>
+                            
+                            <!-- Verification Status -->
+                            {% if user.is_verified %}
+                                <div class="mt-2">
+                                    <small class="text-success">
+                                        <i class="fas fa-check-circle me-1"></i>Verified Member
+                                    </small>
+                                </div>
+                            {% endif %}
                         </div>
                     </div>
-                {% endfor %}
-            </div>
-            
-            <!-- Pagination -->
-            {% if users.has_other_pages %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+    <!-- Pagination -->
+    {% if users.has_other_pages %}
+        <div class="scroll-animation">
+            <div class="pagination-container">
                 <nav aria-label="Page navigation">
-                    <ul class="pagination justify-content-center">
+                    <ul class="pagination">
                         {% if users.has_previous %}
                             <li class="page-item">
                                 <a class="page-link" href="?page={{ users.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
+                                    <i class="fas fa-chevron-left"></i>
                                 </a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">
                                 <a class="page-link" href="#" aria-label="Previous">
-                                    <span aria-hidden="true">&laquo;</span>
+                                    <i class="fas fa-chevron-left"></i>
                                 </a>
                             </li>
                         {% endif %}
                         
                         {% for i in users.paginator.page_range %}
                             {% if users.number == i %}
-                                <li class="page-item active"><a class="page-link" href="#">{{ i }}</a></li>
+                                <li class="page-item active">
+                                    <a class="page-link" href="#">{{ i }}</a>
+                                </li>
                             {% else %}
-                                <li class="page-item"><a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="?page={{ i }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}">{{ i }}</a>
+                                </li>
                             {% endif %}
                         {% endfor %}
                         
                         {% if users.has_next %}
                             <li class="page-item">
                                 <a class="page-link" href="?page={{ users.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
+                                    <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                         {% else %}
                             <li class="page-item disabled">
                                 <a class="page-link" href="#" aria-label="Next">
-                                    <span aria-hidden="true">&raquo;</span>
+                                    <i class="fas fa-chevron-right"></i>
                                 </a>
                             </li>
                         {% endif %}
                     </ul>
                 </nav>
-            {% endif %}
-        {% else %}
-            <div class="alert alert-info">No users found matching your criteria.</div>
-        {% endif %}
+            </div>
+        </div>
+    {% endif %}
+{% else %}
+    <div class="scroll-animation">
+        <div class="no-results">
+            <i class="fas fa-search"></i>
+            <h3>No users found</h3>
+            <p class="text-muted">Try adjusting your search criteria or clear the filters to see all users.</p>
+            <a href="{% url 'directory' %}" class="btn btn-filter mt-3">
+                <i class="fas fa-refresh me-2"></i>Show All Users
+            </a>
+        </div>
     </div>
-</div>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver(function(entries) {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-animation').forEach(el => {
+            observer.observe(el);
+        });
+
+        // Add staggered animation to user cards
+        document.querySelectorAll('.user-card').forEach((card, index) => {
+            card.style.animationDelay = `${index * 0.1}s`;
+        });
+
+        // Form validation
+        const form = document.querySelector('form');
+        const yearInput = document.getElementById('year');
+        
+        if (yearInput) {
+            yearInput.addEventListener('input', function() {
+                const currentYear = new Date().getFullYear();
+                const value = parseInt(this.value);
+                
+                if (value && (value < 1990 || value > currentYear + 5)) {
+                    this.setCustomValidity('Please enter a valid graduation year');
+                } else {
+                    this.setCustomValidity('');
+                }
+            });
+        }
+
+        // Enhanced search functionality
+        const searchInput = document.getElementById('search');
+        if (searchInput) {
+            let searchTimeout;
+            searchInput.addEventListener('input', function() {
+                clearTimeout(searchTimeout);
+                searchTimeout = setTimeout(() => {
+                    // Add visual feedback for search
+                    if (this.value.length > 0) {
+                        this.style.borderColor = '#4facfe';
+                    } else {
+                        this.style.borderColor = '';
+                    }
+                }, 300);
+            });
+        }
+
+        // Add loading state to form submission
+        form.addEventListener('submit', function() {
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.innerHTML;
+            
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i>Searching...';
+            submitBtn.disabled = true;
+            
+            // Re-enable after a short delay (in case of immediate response)
+            setTimeout(() => {
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        });
+    });
+</script>
 {% endblock %}
