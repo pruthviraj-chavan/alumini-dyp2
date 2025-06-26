@@ -1,4 +1,4 @@
-# DYP Salokhenagar Alumni Portal by me
+# DYP Salokhenagar Alumni Portal by mee
 
 A comprehensive web portal for DYP Salokhenagar alumni and students to connect, share achievements, post job opportunities, and communicate securely.
 
